@@ -76,3 +76,18 @@ Para rodar a suíte de testes do cliente MCP:
 python tests/test_client.py
 ```
 
+
+
+---
+
+## 📸 Evidências Comprobatórias (6 Itens da Atividade)
+
+As capturas de comprovação de execução dos 6 itens solicitados estão disponíveis na pasta [`evidencias/`](./evidencias/):
+
+1. **Tool 1**: [`figura_1_tool_listar_produtos_por_categoria.png`](./evidencias/figura_1_tool_listar_produtos_por_categoria.png)
+2. **Tool 2**: [`figura_2_tool_obter_produto_por_id.png`](./evidencias/figura_2_tool_obter_produto_por_id.png)
+3. **Tool 3**: [`figura_3_tool_buscar_produto_por_nome.png`](./evidencias/figura_3_tool_buscar_produto_por_nome.png)
+4. **Tool 4**: [`figura_4_tool_obter_avaliacao_produto.png`](./evidencias/figura_4_tool_obter_avaliacao_produto.png)
+5. **Resource**: [`figura_5_resource_catalogo_completo.png`](./evidencias/figura_5_resource_catalogo_completo.png)
+6. **Prompt**: [`figura_6_prompt_recomendar_produto.png`](./evidencias/figura_6_prompt_recomendar_produto.png)
+7. **Suíte Completa**: [`figura_7_suite_testes_sucesso.png`](./evidencias/figura_7_suite_testes_sucesso.png)

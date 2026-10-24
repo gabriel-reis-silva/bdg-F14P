@@ -22,6 +22,15 @@ sys.path.insert(0, str(root_dir / "src"))
 from server import mcp, catalog, obter_catalogo_completo, recomendar_produto
 
 
+async def call_mcp_tool(mcp_server, tool_name, arguments):
+    """Executa a ferramenta garantindo compatibilidade entre diferentes versões do FastMCP."""
+    if hasattr(mcp_server, "call_tool"):
+        return await mcp_server.call_tool(tool_name, arguments=arguments)
+    tools = await mcp_server.get_tools()
+    tool = tools[tool_name]
+    return await tool.run(arguments)
+
+
 async def run_tests():
     print("==================================================")
     print(" INICIANDO TESTES AUTOMATIZADOS DO SERVIDOR FASTMCP")
@@ -36,34 +45,38 @@ async def run_tests():
 
     # 2. Teste Tool 1: listar_produtos_por_categoria
     print("\n[2] Testando Tool: 'listar_produtos_por_categoria' (categoria='brinquedo')...")
-    res_cat = await mcp.call_tool("listar_produtos_por_categoria", arguments={"categoria": "brinquedo"})
+    res_cat = await call_mcp_tool(mcp, "listar_produtos_por_categoria", arguments={"categoria": "brinquedo"})
     print(f"    - Retorno da Tool:")
     print(f"      {str(res_cat)[:250]}...")
-    assert not res_cat.is_error, "Erro ao listar por categoria"
+    if hasattr(res_cat, "is_error"):
+        assert not res_cat.is_error, "Erro ao listar por categoria"
 
     # 3. Teste Tool 2: obter_produto_por_id
     id_teste = "P003"
     print(f"\n[3] Testando Tool: 'obter_produto_por_id' (id_produto='{id_teste}')...")
-    res_id = await mcp.call_tool("obter_produto_por_id", arguments={"id_produto": id_teste})
+    res_id = await call_mcp_tool(mcp, "obter_produto_por_id", arguments={"id_produto": id_teste})
     print(f"    - Retorno da Tool:")
     print(f"      {str(res_id)[:250]}...")
-    assert not res_id.is_error, "Erro ao obter produto por ID"
+    if hasattr(res_id, "is_error"):
+        assert not res_id.is_error, "Erro ao obter produto por ID"
 
     # 4. Teste Tool 3: buscar_produto_por_nome
     termo_busca = "quebra-cabeca"  # testando busca sem acento
     print(f"\n[4] Testando Tool: 'buscar_produto_por_nome' (nome='{termo_busca}')...")
-    res_busca = await mcp.call_tool("buscar_produto_por_nome", arguments={"nome": termo_busca})
+    res_busca = await call_mcp_tool(mcp, "buscar_produto_por_nome", arguments={"nome": termo_busca})
     print(f"    - Retorno da Tool:")
     print(f"      {str(res_busca)[:250]}...")
-    assert not res_busca.is_error, "Erro ao buscar produto por nome"
+    if hasattr(res_busca, "is_error"):
+        assert not res_busca.is_error, "Erro ao buscar produto por nome"
     assert "P003" in str(res_busca), "Deveria encontrar o produto P003"
 
     # 5. Teste Tool 4: obter_avaliacao_produto
     print(f"\n[5] Testando Tool: 'obter_avaliacao_produto' (id_ou_nome='{id_teste}')...")
-    res_aval = await mcp.call_tool("obter_avaliacao_produto", arguments={"id_ou_nome": id_teste})
+    res_aval = await call_mcp_tool(mcp, "obter_avaliacao_produto", arguments={"id_ou_nome": id_teste})
     print(f"    - Retorno da Tool:")
     print(f"      {str(res_aval)[:250]}...")
-    assert not res_aval.is_error, "Erro ao obter avaliacao"
+    if hasattr(res_aval, "is_error"):
+        assert not res_aval.is_error, "Erro ao obter avaliacao"
     assert "3.6" in str(res_aval) or "Regular" in str(res_aval)
 
     # 6. Teste Resource: products://catalog
@@ -88,4 +101,3 @@ async def run_tests():
 
 if __name__ == "__main__":
     asyncio.run(run_tests())
-
