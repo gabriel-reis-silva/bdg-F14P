@@ -1,1 +1,6 @@
 *falsos
+
+__pycache__/
+*.pyc
+.venv/
+
